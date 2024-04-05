@@ -54,7 +54,7 @@ namespace LinkedList {
     template <typename elem_t>
     ListErrorCode DumpList_    (List <elem_t> *list, char *logFolder, CallingFileData callData);
     template <typename elem_t>
-    ListErrorCode FindValueInListSlowImplementation_ (List <elem_t> *list, elem_t value, ssize_t *index, CallingFileData callData);
+    ListErrorCode FindValue_ (List <elem_t> *list, elem_t value, ssize_t *index, CallingFileData callData);
 
     ListErrorCode ClearHtmlFile ();
 
