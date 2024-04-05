@@ -28,13 +28,13 @@ TEST (InsertTest, ListTests) {
     char    insertedData = 'a';
 
     while (list.freeElem != 0) {
-        EXPECT_EQ (InsertAfter (&list, insertIndex, &insertIndex, insertedData), LinkedList::NO_LIST_ERRORS);
+        EXPECT_EQ (InsertAfter (&list, insertIndex, &insertIndex, &insertedData), LinkedList::NO_LIST_ERRORS);
         EXPECT_EQ (list.data [insertIndex], insertedData);
 
         insertedData++;
     }
 
-    EXPECT_NE (InsertAfter (&list, insertIndex, &insertIndex, insertedData), LinkedList::NO_LIST_ERRORS);
+    EXPECT_NE (InsertAfter (&list, insertIndex, &insertIndex, &insertedData), LinkedList::NO_LIST_ERRORS);
 
     EXPECT_EQ (LinkedList::DestroyList (&list), LinkedList::NO_LIST_ERRORS);
 }

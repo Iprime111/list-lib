@@ -46,7 +46,7 @@ namespace LinkedList {
     template <typename elem_t>
     ListErrorCode DestroyList_ (List <elem_t> *list);
     template <typename elem_t>
-    ListErrorCode InsertAfter_ (List <elem_t> *list, ssize_t insertIndex, ssize_t *newIndex, elem_t element, CallingFileData callData);
+    ListErrorCode InsertAfter_ (List <elem_t> *list, ssize_t insertIndex, ssize_t *newIndex, elem_t *element, CallingFileData callData);
     template <typename elem_t>
     ListErrorCode DeleteValue_ (List <elem_t> *list, ssize_t deleteIndex, CallingFileData callData);
     template <typename elem_t>

@@ -86,7 +86,7 @@ namespace LinkedList {
     }
 
     template <typename elem_t>
-    ListErrorCode InsertAfter_ (List <elem_t> *list, ssize_t insertIndex, ssize_t *newIndex, elem_t element, CallingFileData callData) {
+    ListErrorCode InsertAfter_ (List <elem_t> *list, ssize_t insertIndex, ssize_t *newIndex, elem_t *element, CallingFileData callData) {
         assert (newIndex);
 
         Verification (list, callData);
@@ -111,7 +111,7 @@ namespace LinkedList {
         list->next [*newIndex]   = list->next [insertIndex];
         list->next [insertIndex] = *newIndex;
         list->prev [*newIndex]   = insertIndex;
-        list->data [*newIndex]   = element;
+        list->data [*newIndex]   = *element;
 
         return NO_LIST_ERRORS;
     }
@@ -194,5 +194,6 @@ namespace LinkedList {
 }
 
 #undef ON_DEBUG
+#undef Verification
 
 #endif
