@@ -1,0 +1,57 @@
+Start testing: Apr 05 23:01 MSK
+----------------------------------------------------------
+1/2 Testing: InitTest.ListTests
+1/2 Test: InitTest.ListTests
+Command: "/home/ip111/Code/ListLib/build/MainTest" "--gtest_filter=InitTest.ListTests" "--gtest_also_run_disabled_tests"
+Directory: /home/ip111/Code/ListLib/build
+"InitTest.ListTests" start time: Apr 05 23:01 MSK
+Output:
+----------------------------------------------------------
+Running main() from /usr/src/debug/gtest/googletest-1.14.0/googletest/src/gtest_main.cc
+Note: Google Test filter = InitTest.ListTests
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from InitTest
+[ RUN      ] InitTest.ListTests
+[       OK ] InitTest.ListTests (0 ms)
+[----------] 1 test from InitTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"InitTest.ListTests" end time: Apr 05 23:01 MSK
+"InitTest.ListTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/2 Testing: InsertTest.ListTests
+2/2 Test: InsertTest.ListTests
+Command: "/home/ip111/Code/ListLib/build/MainTest" "--gtest_filter=InsertTest.ListTests" "--gtest_also_run_disabled_tests"
+Directory: /home/ip111/Code/ListLib/build
+"InsertTest.ListTests" start time: Apr 05 23:01 MSK
+Output:
+----------------------------------------------------------
+Running main() from /usr/src/debug/gtest/googletest-1.14.0/googletest/src/gtest_main.cc
+Note: Google Test filter = InsertTest.ListTests
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from InsertTest
+[ RUN      ] InsertTest.ListTests
+[       OK ] InsertTest.ListTests (0 ms)
+[----------] 1 test from InsertTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"InsertTest.ListTests" end time: Apr 05 23:01 MSK
+"InsertTest.ListTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Apr 05 23:01 MSK

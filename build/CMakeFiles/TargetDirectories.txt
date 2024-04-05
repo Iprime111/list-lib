@@ -1,0 +1,4 @@
+/home/ip111/Code/ListLib/build/CMakeFiles/MainTest.dir
+/home/ip111/Code/ListLib/build/CMakeFiles/test.dir
+/home/ip111/Code/ListLib/build/CMakeFiles/edit_cache.dir
+/home/ip111/Code/ListLib/build/CMakeFiles/rebuild_cache.dir

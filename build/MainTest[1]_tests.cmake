@@ -1,0 +1,5 @@
+add_test([=[InitTest.ListTests]=]  /home/ip111/Code/ListLib/build/MainTest [==[--gtest_filter=InitTest.ListTests]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[InitTest.ListTests]=]  PROPERTIES WORKING_DIRECTORY /home/ip111/Code/ListLib/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+add_test([=[InsertTest.ListTests]=]  /home/ip111/Code/ListLib/build/MainTest [==[--gtest_filter=InsertTest.ListTests]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[InsertTest.ListTests]=]  PROPERTIES WORKING_DIRECTORY /home/ip111/Code/ListLib/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+set(  MainTest_TESTS InitTest.ListTests InsertTest.ListTests)

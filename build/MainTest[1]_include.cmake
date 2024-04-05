@@ -1,0 +1,5 @@
+if(EXISTS "/home/ip111/Code/ListLib/build/MainTest[1]_tests.cmake")
+  include("/home/ip111/Code/ListLib/build/MainTest[1]_tests.cmake")
+else()
+  add_test(MainTest_NOT_BUILT MainTest_NOT_BUILT)
+endif()
