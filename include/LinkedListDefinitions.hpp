@@ -8,18 +8,18 @@ namespace LinkedList {
     const size_t REALLOC_SCALE = 2;
 
     enum ListErrorCode {
-        NO_LIST_ERRORS          = 0,
-        LIST_NULL_POINTER       = 1 << 0,
-        PREV_NULL_POINTER       = 1 << 1,
-        NEXT_NULL_POINTER       = 1 << 2,
-        DATA_NULL_POINTER       = 1 << 3,
-        FREE_LIST_ERROR         = 1 << 4,
-        WRONG_INDEX             = 1 << 5,
-        GRAPHVIZ_BUFFER_ERROR   = 1 << 6,
-        LOG_FILE_ERROR          = 1 << 7,
-        INVALID_CAPACITY        = 1 << 8,
-        INVALID_HEAD            = 1 << 9,
-        INVALID_TAIL            = 1 << 10,
+        NO_LIST_ERRORS        = 0,
+        LIST_NULL_POINTER     = 1 << 0,
+        PREV_NULL_POINTER     = 1 << 1,
+        NEXT_NULL_POINTER     = 1 << 2,
+        DATA_NULL_POINTER     = 1 << 3,
+        FREE_LIST_ERROR       = 1 << 4,
+        WRONG_INDEX           = 1 << 5,
+        GRAPHVIZ_BUFFER_ERROR = 1 << 6,
+        LOG_FILE_ERROR        = 1 << 7,
+        INVALID_CAPACITY      = 1 << 8,
+        INVALID_HEAD          = 1 << 9,
+        INVALID_TAIL          = 1 << 10,
     };
 
     struct CallingFileData {
@@ -30,14 +30,12 @@ namespace LinkedList {
 
     template <typename elem_t>
     struct List {
-        elem_t *data        = NULL;
+        elem_t  *data = NULL;
+        ssize_t *next = NULL;
+        ssize_t *prev = NULL;
 
-        ssize_t *next       = NULL;
-        ssize_t *prev       = NULL;
-
-        ssize_t capacity    = -1;
-
-        ssize_t freeElem    = -1;
+        ssize_t capacity = -1;
+        ssize_t freeElem = -1;
 
         ListErrorCode errors;
         CallingFileData creationData;
