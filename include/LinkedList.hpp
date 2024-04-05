@@ -193,4 +193,6 @@ namespace LinkedList {
     }
 }
 
+#undef ON_DEBUG
+
 #endif
