@@ -139,7 +139,7 @@ namespace LinkedList {
         #define ErrorCheck(condition, errorCodes)   \
             do {                                    \
                 if (!(condition)) {                 \
-                    WriteErrors (list, errorCodes); \
+                    ReturnErrors (list, errorCodes);\
                 }                                   \
             } while (0)
 
