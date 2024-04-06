@@ -24,15 +24,15 @@ namespace LinkedList {
 
     struct CallingFileData {
         int line             = -1;
-        const char *file     = NULL;
-        const char *function = NULL;
+        const char *file     = nullptr;
+        const char *function = nullptr;
     };
 
     template <typename elem_t>
     struct List {
-        elem_t  *data = NULL;
-        ssize_t *next = NULL;
-        ssize_t *prev = NULL;
+        elem_t  *data = nullptr;
+        ssize_t *next = nullptr;
+        ssize_t *prev = nullptr;
 
         ssize_t capacity = -1;
         ssize_t freeElem = -1;
