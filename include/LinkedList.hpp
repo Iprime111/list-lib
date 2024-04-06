@@ -70,17 +70,9 @@ namespace LinkedList {
             return LIST_NULL_POINTER;
         }
 
-        #define ZeroMemory(arrayPointer) memset (arrayPointer, 0, (size_t) list->capacity * sizeof (elem_t))
-
-        ZeroMemory (list->data);
-        ZeroMemory (list->prev);
-        ZeroMemory (list->next);
-
         free (list->data);
         free (list->prev);
         free (list->next);
-
-        #undef ZeroMemory
 
         return NO_LIST_ERRORS;
     }
@@ -148,7 +140,7 @@ namespace LinkedList {
             do {                                    \
                 if (!(condition)) {                 \
                     WriteErrors (list, errorCodes); \
-                }                                   \
+                }       comparator                            \
             } while (0)
 
         if (!list) {
