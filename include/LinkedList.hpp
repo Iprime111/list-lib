@@ -211,7 +211,7 @@ namespace LinkedList {
         Verification (list, callData);
 
         for (ssize_t elementIndex = list->next [0]; elementIndex != 0; elementIndex = list->next [elementIndex]) {
-            if (!comparator (&list->data [elementIndex], value)) {
+            if (!ElementComparator (&list->data [elementIndex], value)) {
                 *index = elementIndex;
                 return NO_LIST_ERRORS;
             }
