@@ -26,18 +26,31 @@
         } while (0)                                         \
     )
 
+#define WriteErrors(list, errorCodes)  (list)->errors = (ListErrorCode) ((list)->errors | (errorCodes))
+#define ReturnErrors(list, errorCodes) WriteErrors (list, errorCodes); return (list)->errors
+#define ErrorCheck(condition, errorCodes)   \
+    do {                                    \
+        if (!(condition)) {                 \
+            ReturnErrors (list, errorCodes);\
+        }                                   \
+    } while (0)
+
 namespace LinkedList {
     template <typename elem_t>
     ListErrorCode InitList_ (List <elem_t> *list, size_t capacity, CallingFileData creationData) {
-        if (!list) {
+        if (!list)
             return LIST_NULL_POINTER;
-        }
 
+        list->size     = 1;
         list->capacity = (ssize_t) capacity + 1;
 
-        list->next = (ssize_t *) calloc ((size_t) list->capacity, sizeof (ssize_t));
-        list->prev = (ssize_t *) calloc ((size_t) list->capacity, sizeof (ssize_t));
-        list->data = (elem_t *)  calloc ((size_t) list->capacity, sizeof (elem_t));
+        #define AllocateArray(name, type) list->name = (type *) calloc ((size_t) list->capacity, sizeof (type))
+
+        AllocateArray (next, ssize_t);
+        AllocateArray (prev, ssize_t);
+        AllocateArray (data, elem_t);
+
+        #undef AllocateArray
 
         #define CheckForNull(expression, error) if (!(expression)) {return error;}
 
@@ -52,9 +65,9 @@ namespace LinkedList {
 
         list->freeElem = 1;
 
-        for (ssize_t listIndex = list->freeElem; listIndex < list->capacity; listIndex++) {
-            list->next [listIndex] = (listIndex + 1) % list->capacity;
-            list->prev [listIndex] = -1;
+        for (ssize_t freeIndex = list->freeElem; freeIndex < list->capacity; freeIndex++) {
+            list->next [freeIndex] = (freeIndex + 1) % list->capacity;
+            list->prev [freeIndex] = -1;
         }
 
         list->creationData = creationData;
@@ -66,9 +79,10 @@ namespace LinkedList {
     
     template <typename elem_t>
     ListErrorCode DestroyList_ (List <elem_t> *list) {
-        if (!list) {
+        if (!list)
             return LIST_NULL_POINTER;
-        }
+
+        list->capacity = list->size = -1;
 
         free (list->data);
         free (list->prev);
@@ -80,20 +94,18 @@ namespace LinkedList {
     template <typename elem_t>
     ListErrorCode InsertAfter_ (List <elem_t> *list, ssize_t insertIndex, ssize_t *newIndex, elem_t *element, CallingFileData callData) {
         assert (newIndex);
+        assert (element);
 
         Verification (list, callData);
 
-        if (insertIndex < 0 || insertIndex >= list->capacity) {
+        if (insertIndex < 0 || insertIndex >= list->capacity)
             return WRONG_INDEX;
-        }
 
-        if (list->prev [insertIndex] == -1) {
+        if (list->prev [insertIndex] == -1)
             return WRONG_INDEX;
-        }
 
-        if (list->freeElem == 0) {
-            return INVALID_CAPACITY;
-        }
+        if (list->freeElem == 0 && ReallocUp_ (list, callData) != NO_LIST_ERRORS)
+                return INVALID_CAPACITY;
 
         *newIndex = list->freeElem;
         list->freeElem = list->next [list->freeElem];
@@ -105,47 +117,73 @@ namespace LinkedList {
         list->prev [*newIndex]   = insertIndex;
         list->data [*newIndex]   = *element;
 
+        list->size++;
+
         return NO_LIST_ERRORS;
     }
 
     template <typename elem_t>
     ListErrorCode DeleteValue_ (List <elem_t> *list, ssize_t deleteIndex, CallingFileData callData) {
-
         Verification (list, callData);
 
-        if (deleteIndex <= 0) {
+        if (deleteIndex <= 0)
             return WRONG_INDEX;
-        }
 
-        if (list->prev [deleteIndex] == -1) {
+        if (list->prev [deleteIndex] == -1)
             return WRONG_INDEX;
-        }
 
         list->prev [list->next [deleteIndex]] = list->prev [deleteIndex];
         list->next [list->prev [deleteIndex]] = list->next [deleteIndex];
 
-        list->next [deleteIndex]    = list->freeElem;
-        list->prev [deleteIndex]    = -1;
-        list->freeElem              = deleteIndex;
+        list->next [deleteIndex] = list->freeElem;
+        list->prev [deleteIndex] = -1;
+        list->freeElem           = deleteIndex;
+
+        list->size--;
 
         return NO_LIST_ERRORS;
     }
 
     template <typename elem_t>
-    ListErrorCode VerifyList (List <elem_t> *list) {
+    ListErrorCode ReallocUp_ (List <elem_t> *list, CallingFileData callData) {
+        Verification (list, callData);
 
-        #define WriteErrors(list, errorCodes)  (list)->errors = (ListErrorCode) ((list)->errors | (errorCodes))
-        #define ReturnErrors(list, errorCodes) WriteErrors (list, errorCodes); return (list)->errors
-        #define ErrorCheck(condition, errorCodes)   \
-            do {                                    \
-                if (!(condition)) {                 \
-                    ReturnErrors (list, errorCodes);\
-                }                                   \
+        ssize_t prevCapacity = list->capacity;
+
+        list->capacity *= (ssize_t) REALLOC_SCALE;
+
+        #define ReallocateArray(name, type, error)                                                          \
+            do {                                                                                            \
+                list->name = (type *) reallocarray (list->name, (size_t) list->capacity, sizeof (type));    \
+                if (!list->name) {                                                                          \
+                    ReturnErrors (list, error);                                                             \
+                }                                                                                           \
             } while (0)
 
-        if (!list) {
-            return LIST_NULL_POINTER;
+        ReallocateArray (next, ssize_t, NEXT_NULL_POINTER);
+        ReallocateArray (prev, ssize_t, PREV_NULL_POINTER);
+        ReallocateArray (data, elem_t,  DATA_NULL_POINTER);
+
+        #undef ReallocateArray
+
+        for (ssize_t freeIndex = prevCapacity; freeIndex < list->capacity; freeIndex++) {
+            list->next [freeIndex] = (freeIndex + 1) % list->capacity;
+            list->prev [freeIndex] = -1;
         }
+
+        list->next [list->capacity - 1] = list->freeElem;
+        list->freeElem = prevCapacity;
+
+        Verification (list, callData);
+
+        return NO_LIST_ERRORS;
+    }
+
+    template <typename elem_t>
+    ListErrorCode VerifyList_ (List <elem_t> *list) {
+        
+        if (!list)
+            return LIST_NULL_POINTER;
 
         ErrorCheck (list->data,                                             DATA_NULL_POINTER);
         ErrorCheck (list->prev,                                             PREV_NULL_POINTER);
@@ -162,10 +200,6 @@ namespace LinkedList {
 
             freeIndex = list->next [freeIndex];
         }
-
-        #undef WriteErrors
-        #undef ReturnErrors
-        #undef ErrorCheck
 
         return list->errors;
     }
@@ -188,5 +222,8 @@ namespace LinkedList {
 
 #undef ON_DEBUG
 #undef Verification
+#undef WriteErrors
+#undef ReturnErrors
+#undef ErrorCheck
 
 #endif

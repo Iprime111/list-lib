@@ -1,6 +1,7 @@
+#include "LinkedListDefinitions.hpp"
 #include <gtest/gtest.h>
 
-#include "LinkedList.hpp"
+#include <LinkedList.hpp>
 
 TEST (InitTest, ListTests) {
     LinkedList::List <char> list = {};
@@ -21,20 +22,32 @@ TEST (InitTest, ListTests) {
 
 TEST (InsertTest, ListTests) {
     LinkedList::List <char> list = {};
+    const size_t listSize = 10;
 
-    EXPECT_EQ (LinkedList::InitList (&list, 10), LinkedList::NO_LIST_ERRORS);
+    EXPECT_EQ (LinkedList::InitList (&list, listSize), LinkedList::NO_LIST_ERRORS);
 
-    ssize_t insertIndex  = 0;
-    char    insertedData = 'a';
+    ssize_t insertIndex = 0;
 
-    while (list.freeElem != 0) {
+    for (char insertedData = 'a'; insertedData < 'a' + (char) listSize; insertedData++) {
         EXPECT_EQ (InsertAfter (&list, insertIndex, &insertIndex, &insertedData), LinkedList::NO_LIST_ERRORS);
         EXPECT_EQ (list.data [insertIndex], insertedData);
-
-        insertedData++;
     }
 
-    EXPECT_NE (InsertAfter (&list, insertIndex, &insertIndex, &insertedData), LinkedList::NO_LIST_ERRORS);
+    EXPECT_EQ (LinkedList::DestroyList (&list), LinkedList::NO_LIST_ERRORS);
+}
+
+TEST (ReallocTest, ListTests) {
+    LinkedList::List <char> list = {};
+    const size_t listSize = 5;
+
+    EXPECT_EQ (LinkedList::InitList (&list, listSize), LinkedList::NO_LIST_ERRORS);
+
+    ssize_t insertIndex = 0;
+
+    for (char insertedData = 'a'; insertedData < 'a' + (char) listSize * 2; insertedData++) {
+        EXPECT_EQ (InsertAfter (&list, insertIndex, &insertIndex, &insertedData), LinkedList::NO_LIST_ERRORS);
+        EXPECT_EQ (list.data [insertIndex], insertedData);
+    }
 
     EXPECT_EQ (LinkedList::DestroyList (&list), LinkedList::NO_LIST_ERRORS);
 }

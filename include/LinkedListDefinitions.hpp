@@ -34,6 +34,7 @@ namespace LinkedList {
         ssize_t *next = nullptr;
         ssize_t *prev = nullptr;
 
+        ssize_t size     = -1;
         ssize_t capacity = -1;
         ssize_t freeElem = -1;
 
