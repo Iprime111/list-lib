@@ -140,7 +140,7 @@ namespace LinkedList {
             do {                                    \
                 if (!(condition)) {                 \
                     WriteErrors (list, errorCodes); \
-                }       comparator                            \
+                }                                   \
             } while (0)
 
         if (!list) {
