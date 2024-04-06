@@ -28,9 +28,12 @@ namespace LinkedList {
         const char *function = nullptr;
     };
 
-    template <typename elem_t>
+    template <typename ElementPointer>
+    using Comparator = int (*) (ElementPointer firstElement, ElementPointer secondElement);
+
+    template <typename Element, Comparator <Element *> comparator>
     struct List {
-        elem_t  *data = nullptr;
+        Element  *data = nullptr;
         ssize_t *next = nullptr;
         ssize_t *prev = nullptr;
 
@@ -42,20 +45,29 @@ namespace LinkedList {
         CallingFileData creationData;
     };
 
-    template <typename elem_t>
-    ListErrorCode InitList_    (List <elem_t> *list, size_t capacity, CallingFileData creationData);
-    template <typename elem_t>
-    ListErrorCode DestroyList_ (List <elem_t> *list);
-    template <typename elem_t>
-    ListErrorCode InsertAfter_ (List <elem_t> *list, ssize_t insertIndex, ssize_t *newIndex, elem_t *element, CallingFileData callData);
-    template <typename elem_t>
-    ListErrorCode DeleteValue_ (List <elem_t> *list, ssize_t deleteIndex, CallingFileData callData);
-    template <typename elem_t>
-    ListErrorCode VerifyList_  (List <elem_t> *list);
-    template <typename elem_t>
-    ListErrorCode DumpList_    (List <elem_t> *list, char *logFolder, CallingFileData callData);
-    template <typename elem_t>
-    ListErrorCode FindValue_ (List <elem_t> *list, elem_t *value, ssize_t *index, CallingFileData callData);
+    template <typename Element, Comparator <Element *> comparator>
+    ListErrorCode InitList_    (List <Element, comparator> *list, size_t capacity, CallingFileData creationData);
+
+    template <typename Element, Comparator <Element *> comparator>
+    ListErrorCode DestroyList_ (List <Element, comparator> *list);
+    
+    template <typename Element, Comparator <Element *> comparator>
+    ListErrorCode InsertAfter_ (List <Element, comparator> *list, ssize_t insertIndex, ssize_t *newIndex, Element *element, CallingFileData callData);
+    
+    template <typename Element, Comparator <Element *> comparator>
+    ListErrorCode DeleteValue_ (List <Element, comparator> *list, ssize_t deleteIndex, CallingFileData callData);
+    
+    template <typename Element, Comparator <Element *> comparator>
+    ListErrorCode VerifyList_  (List <Element, comparator> *list);
+    
+    template <typename Element, Comparator <Element *> comparator>
+    ListErrorCode DumpList_    (List <Element, comparator> *list, char *logFolder, CallingFileData callData);
+    
+    template <typename Element, Comparator <Element *> comparator>
+    ListErrorCode FindValue_   (List <Element, comparator> *list, Element *value, ssize_t *index, CallingFileData callData);
+    
+    template <typename Element, Comparator <Element *> comparator>
+    ListErrorCode ReallocUp_   (List <Element, comparator> *list, CallingFileData callData);
 
     ListErrorCode ClearHtmlFile ();
 

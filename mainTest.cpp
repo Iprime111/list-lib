@@ -3,8 +3,12 @@
 
 #include <LinkedList.hpp>
 
+inline int CharComparator (char *firstValue, char *secondValue) {
+    return *firstValue - *secondValue;
+}
+
 TEST (InitTest, ListTests) {
-    LinkedList::List <char> list = {};
+    LinkedList::List <char, CharComparator> list = {};
 
     EXPECT_EQ (LinkedList::InitList (&list, 10), LinkedList::NO_LIST_ERRORS);
 
@@ -21,7 +25,7 @@ TEST (InitTest, ListTests) {
 }
 
 TEST (InsertTest, ListTests) {
-    LinkedList::List <char> list = {};
+    LinkedList::List <char, CharComparator> list = {};
     const size_t listSize = 10;
 
     EXPECT_EQ (LinkedList::InitList (&list, listSize), LinkedList::NO_LIST_ERRORS);
@@ -37,7 +41,7 @@ TEST (InsertTest, ListTests) {
 }
 
 TEST (ReallocTest, ListTests) {
-    LinkedList::List <char> list = {};
+    LinkedList::List <char, CharComparator> list = {};
     const size_t listSize = 5;
 
     EXPECT_EQ (LinkedList::InitList (&list, listSize), LinkedList::NO_LIST_ERRORS);

@@ -7,7 +7,6 @@
 #include <stdlib.h>
 
 #include "LinkedListDefinitions.hpp"
-#include "LinkedListComparators.hpp"
 
 #ifndef NDEBUG
     #define ON_DEBUG(...) __VA_ARGS__
@@ -36,8 +35,8 @@
     } while (0)
 
 namespace LinkedList {
-    template <typename elem_t>
-    ListErrorCode InitList_ (List <elem_t> *list, size_t capacity, CallingFileData creationData) {
+    template <typename Element, Comparator <Element *> comparator>
+    ListErrorCode InitList_ (List <Element, comparator> *list, size_t capacity, CallingFileData creationData) {
         if (!list)
             return LIST_NULL_POINTER;
 
@@ -48,7 +47,7 @@ namespace LinkedList {
 
         AllocateArray (next, ssize_t);
         AllocateArray (prev, ssize_t);
-        AllocateArray (data, elem_t);
+        AllocateArray (data, Element);
 
         #undef AllocateArray
 
@@ -77,8 +76,8 @@ namespace LinkedList {
         return NO_LIST_ERRORS;
     }
     
-    template <typename elem_t>
-    ListErrorCode DestroyList_ (List <elem_t> *list) {
+    template <typename Element, Comparator <Element *> comparator>
+    ListErrorCode DestroyList_ (List <Element, comparator> *list) {
         if (!list)
             return LIST_NULL_POINTER;
 
@@ -91,8 +90,8 @@ namespace LinkedList {
         return NO_LIST_ERRORS;
     }
 
-    template <typename elem_t>
-    ListErrorCode InsertAfter_ (List <elem_t> *list, ssize_t insertIndex, ssize_t *newIndex, elem_t *element, CallingFileData callData) {
+    template <typename Element, Comparator <Element *> comparator>
+    ListErrorCode InsertAfter_ (List <Element, comparator> *list, ssize_t insertIndex, ssize_t *newIndex, Element *element, CallingFileData callData) {
         assert (newIndex);
         assert (element);
 
@@ -122,8 +121,8 @@ namespace LinkedList {
         return NO_LIST_ERRORS;
     }
 
-    template <typename elem_t>
-    ListErrorCode DeleteValue_ (List <elem_t> *list, ssize_t deleteIndex, CallingFileData callData) {
+    template <typename Element, Comparator <Element *> comparator>
+    ListErrorCode DeleteValue_ (List <Element, comparator> *list, ssize_t deleteIndex, CallingFileData callData) {
         Verification (list, callData);
 
         if (deleteIndex <= 0)
@@ -144,8 +143,8 @@ namespace LinkedList {
         return NO_LIST_ERRORS;
     }
 
-    template <typename elem_t>
-    ListErrorCode ReallocUp_ (List <elem_t> *list, CallingFileData callData) {
+    template <typename Element, Comparator <Element *> comparator>
+    ListErrorCode ReallocUp_ (List <Element, comparator> *list, CallingFileData callData) {
         Verification (list, callData);
 
         ssize_t prevCapacity = list->capacity;
@@ -162,7 +161,7 @@ namespace LinkedList {
 
         ReallocateArray (next, ssize_t, NEXT_NULL_POINTER);
         ReallocateArray (prev, ssize_t, PREV_NULL_POINTER);
-        ReallocateArray (data, elem_t,  DATA_NULL_POINTER);
+        ReallocateArray (data, Element,  DATA_NULL_POINTER);
 
         #undef ReallocateArray
 
@@ -179,8 +178,8 @@ namespace LinkedList {
         return NO_LIST_ERRORS;
     }
 
-    template <typename elem_t>
-    ListErrorCode VerifyList_ (List <elem_t> *list) {
+    template <typename Element, Comparator <Element *> comparator>
+    ListErrorCode VerifyList_ (List <Element, comparator> *list) {
         
         if (!list)
             return LIST_NULL_POINTER;
@@ -204,12 +203,12 @@ namespace LinkedList {
         return list->errors;
     }
 
-    template <typename elem_t>
-    ListErrorCode FindValue_ (List <elem_t> *list, elem_t *value, ssize_t *index, CallingFileData callData) {
+    template <typename Element, Comparator <Element *> comparator>
+    ListErrorCode FindValue_ (List <Element, comparator> *list, Element *value, ssize_t *index, CallingFileData callData) {
         Verification (list, callData);
 
         for (ssize_t elementIndex = list->next [0]; elementIndex != 0; elementIndex = list->next [elementIndex]) {
-            if (!ListElementComparator (&list->data [elementIndex], value)) {
+            if (!comparator (&list->data [elementIndex], value)) {
                 *index = elementIndex;
                 return NO_LIST_ERRORS;
             }
