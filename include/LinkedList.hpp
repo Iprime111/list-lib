@@ -179,10 +179,11 @@ namespace LinkedList {
     }
 
     template <typename elem_t>
-    ListErrorCode FindValue_ (List <elem_t> *list, elem_t value, ssize_t *index, CallingFileData callData) {
+    ListErrorCode FindValue_ (List <elem_t> *list, elem_t *value, ssize_t *index, CallingFileData callData) {
+        Verification (list, callData);
 
         for (ssize_t elementIndex = list->next [0]; elementIndex != 0; elementIndex = list->next [elementIndex]) {
-            if (!ListElementComparator (list->data [elementIndex], value)) {
+            if (!ListElementComparator (&list->data [elementIndex], value)) {
                 *index = elementIndex;
                 return NO_LIST_ERRORS;
             }
