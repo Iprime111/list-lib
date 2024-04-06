@@ -8,6 +8,8 @@
 
 #include "LinkedListDefinitions.hpp"
 
+#define ListTemplate template <typename Element, Comparator <Element *> ElementComparator>
+
 #ifndef NDEBUG
     #define ON_DEBUG(...) __VA_ARGS__
 #else
@@ -35,8 +37,8 @@
     } while (0)
 
 namespace LinkedList {
-    template <typename Element, Comparator <Element *> comparator>
-    ListErrorCode InitList_ (List <Element, comparator> *list, size_t capacity, CallingFileData creationData) {
+    ListTemplate
+    ListErrorCode InitList_ (List <Element, ElementComparator> *list, size_t capacity, CallingFileData creationData) {
         if (!list)
             return LIST_NULL_POINTER;
 
@@ -76,8 +78,8 @@ namespace LinkedList {
         return NO_LIST_ERRORS;
     }
     
-    template <typename Element, Comparator <Element *> comparator>
-    ListErrorCode DestroyList_ (List <Element, comparator> *list) {
+    ListTemplate
+    ListErrorCode DestroyList_ (List <Element, ElementComparator> *list) {
         if (!list)
             return LIST_NULL_POINTER;
 
@@ -90,8 +92,9 @@ namespace LinkedList {
         return NO_LIST_ERRORS;
     }
 
-    template <typename Element, Comparator <Element *> comparator>
-    ListErrorCode InsertAfter_ (List <Element, comparator> *list, ssize_t insertIndex, ssize_t *newIndex, Element *element, CallingFileData callData) {
+    ListTemplate
+    ListErrorCode InsertAfter_ (List <Element, ElementComparator> *list, ssize_t insertIndex, 
+                                ssize_t *newIndex, Element *element, CallingFileData callData) {
         assert (newIndex);
         assert (element);
 
@@ -121,8 +124,8 @@ namespace LinkedList {
         return NO_LIST_ERRORS;
     }
 
-    template <typename Element, Comparator <Element *> comparator>
-    ListErrorCode DeleteValue_ (List <Element, comparator> *list, ssize_t deleteIndex, CallingFileData callData) {
+    ListTemplate
+    ListErrorCode DeleteValue_ (List <Element, ElementComparator> *list, ssize_t deleteIndex, CallingFileData callData) {
         Verification (list, callData);
 
         if (deleteIndex <= 0)
@@ -143,8 +146,8 @@ namespace LinkedList {
         return NO_LIST_ERRORS;
     }
 
-    template <typename Element, Comparator <Element *> comparator>
-    ListErrorCode ReallocUp_ (List <Element, comparator> *list, CallingFileData callData) {
+    ListTemplate
+    ListErrorCode ReallocUp_ (List <Element, ElementComparator> *list, CallingFileData callData) {
         Verification (list, callData);
 
         ssize_t prevCapacity = list->capacity;
@@ -178,8 +181,8 @@ namespace LinkedList {
         return NO_LIST_ERRORS;
     }
 
-    template <typename Element, Comparator <Element *> comparator>
-    ListErrorCode VerifyList_ (List <Element, comparator> *list) {
+    ListTemplate
+    ListErrorCode VerifyList_ (List <Element, ElementComparator> *list) {
         
         if (!list)
             return LIST_NULL_POINTER;
@@ -203,8 +206,8 @@ namespace LinkedList {
         return list->errors;
     }
 
-    template <typename Element, Comparator <Element *> comparator>
-    ListErrorCode FindValue_ (List <Element, comparator> *list, Element *value, ssize_t *index, CallingFileData callData) {
+    ListTemplate
+    ListErrorCode FindValue_ (List <Element, ElementComparator> *list, Element *value, ssize_t *index, CallingFileData callData) {
         Verification (list, callData);
 
         for (ssize_t elementIndex = list->next [0]; elementIndex != 0; elementIndex = list->next [elementIndex]) {
@@ -219,6 +222,7 @@ namespace LinkedList {
     }
 }
 
+#undef ListTemplate
 #undef ON_DEBUG
 #undef Verification
 #undef WriteErrors

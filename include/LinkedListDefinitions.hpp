@@ -4,6 +4,8 @@
 #include <stddef.h>
 #include <sys/types.h>
 
+#define ListTemplate template <typename Element, Comparator <Element *> ElementComparator>
+
 namespace LinkedList {
     const size_t REALLOC_SCALE = 2;
 
@@ -31,7 +33,7 @@ namespace LinkedList {
     template <typename ElementPointer>
     using Comparator = int (*) (ElementPointer firstElement, ElementPointer secondElement);
 
-    template <typename Element, Comparator <Element *> comparator>
+    ListTemplate
     struct List {
         Element  *data = nullptr;
         ssize_t *next = nullptr;
@@ -45,29 +47,23 @@ namespace LinkedList {
         CallingFileData creationData;
     };
 
-    template <typename Element, Comparator <Element *> comparator>
-    ListErrorCode InitList_    (List <Element, comparator> *list, size_t capacity, CallingFileData creationData);
-
-    template <typename Element, Comparator <Element *> comparator>
-    ListErrorCode DestroyList_ (List <Element, comparator> *list);
-    
-    template <typename Element, Comparator <Element *> comparator>
-    ListErrorCode InsertAfter_ (List <Element, comparator> *list, ssize_t insertIndex, ssize_t *newIndex, Element *element, CallingFileData callData);
-    
-    template <typename Element, Comparator <Element *> comparator>
-    ListErrorCode DeleteValue_ (List <Element, comparator> *list, ssize_t deleteIndex, CallingFileData callData);
-    
-    template <typename Element, Comparator <Element *> comparator>
-    ListErrorCode VerifyList_  (List <Element, comparator> *list);
-    
-    template <typename Element, Comparator <Element *> comparator>
-    ListErrorCode DumpList_    (List <Element, comparator> *list, char *logFolder, CallingFileData callData);
-    
-    template <typename Element, Comparator <Element *> comparator>
-    ListErrorCode FindValue_   (List <Element, comparator> *list, Element *value, ssize_t *index, CallingFileData callData);
-    
-    template <typename Element, Comparator <Element *> comparator>
-    ListErrorCode ReallocUp_   (List <Element, comparator> *list, CallingFileData callData);
+    ListTemplate
+    ListErrorCode InitList_    (List <Element, ElementComparator> *list, size_t capacity, CallingFileData creationData);
+    ListTemplate
+    ListErrorCode DestroyList_ (List <Element, ElementComparator> *list);
+    ListTemplate
+    ListErrorCode InsertAfter_ (List <Element, ElementComparator> *list, ssize_t insertIndex, 
+                                ssize_t *newIndex, Element *element, CallingFileData callData);
+    ListTemplate
+    ListErrorCode DeleteValue_ (List <Element, ElementComparator> *list, ssize_t deleteIndex, CallingFileData callData);
+    ListTemplate
+    ListErrorCode VerifyList_  (List <Element, ElementComparator> *list);
+    ListTemplate
+    ListErrorCode DumpList_    (List <Element, ElementComparator> *list, char *logFolder, CallingFileData callData);
+    ListTemplate
+    ListErrorCode FindValue_   (List <Element, ElementComparator> *list, Element *value, ssize_t *index, CallingFileData callData);
+    ListTemplate
+    ListErrorCode ReallocUp_   (List <Element, ElementComparator> *list, CallingFileData callData);
 
     ListErrorCode ClearHtmlFile ();
 
@@ -83,4 +79,7 @@ namespace LinkedList {
     #define FindValue(list, value, index) FindValue_ (list, value, index, CreateCallingFileData);
 
 }
+
+#undef ListTemplate
+
 #endif
