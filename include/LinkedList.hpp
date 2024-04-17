@@ -6,9 +6,17 @@
 #include <cstring>
 #include <stdlib.h>
 
+#ifdef TRACY_ENABLE
+    #include <Tracy.hpp>
+#endif
+
 #include "LinkedListDefinitions.hpp"
 
 #define ListTemplate template <typename Element, Comparator <Element *> ElementComparator>
+
+#ifndef TRACY_ENABLE
+    #define ZoneScoped
+#endif
 
 #ifndef NDEBUG
     #define ON_DEBUG(...) __VA_ARGS__
@@ -16,6 +24,7 @@
     #define ON_DEBUG(...)
 #endif
 
+//TODO dump
 #define Verification(list, callData)                        \
     ON_DEBUG (                                              \
         do {                                                \
@@ -39,6 +48,8 @@
 namespace LinkedList {
     ListTemplate
     ListErrorCode InitList_ (List <Element, ElementComparator> *list, size_t capacity, CallingFileData creationData) {
+        ZoneScoped;
+
         if (!list)
             return LIST_NULL_POINTER;
 
@@ -80,6 +91,8 @@ namespace LinkedList {
     
     ListTemplate
     ListErrorCode DestroyList_ (List <Element, ElementComparator> *list) {
+        ZoneScoped;
+
         if (!list)
             return LIST_NULL_POINTER;
 
@@ -95,6 +108,8 @@ namespace LinkedList {
     ListTemplate
     ListErrorCode InsertAfter_ (List <Element, ElementComparator> *list, ssize_t insertIndex, 
                                 ssize_t *newIndex, Element *element, CallingFileData callData) {
+        ZoneScoped;
+
         assert (newIndex);
         assert (element);
 
@@ -126,6 +141,7 @@ namespace LinkedList {
 
     ListTemplate
     ListErrorCode DeleteValue_ (List <Element, ElementComparator> *list, ssize_t deleteIndex, CallingFileData callData) {
+        ZoneScoped;
         Verification (list, callData);
 
         if (deleteIndex <= 0)
@@ -148,6 +164,7 @@ namespace LinkedList {
 
     ListTemplate
     ListErrorCode ReallocUp_ (List <Element, ElementComparator> *list, CallingFileData callData) {
+        ZoneScoped;
         Verification (list, callData);
 
         ssize_t prevCapacity = list->capacity;
@@ -183,6 +200,7 @@ namespace LinkedList {
 
     ListTemplate
     ListErrorCode VerifyList_ (List <Element, ElementComparator> *list) {
+        ZoneScoped;
         
         if (!list)
             return LIST_NULL_POINTER;
@@ -208,6 +226,7 @@ namespace LinkedList {
 
     ListTemplate
     ListErrorCode FindValue_ (List <Element, ElementComparator> *list, Element *value, ssize_t *index, CallingFileData callData) {
+        ZoneScoped;
         Verification (list, callData);
 
         for (ssize_t elementIndex = list->next [0]; elementIndex != 0; elementIndex = list->next [elementIndex]) {
@@ -221,6 +240,10 @@ namespace LinkedList {
         return NO_LIST_ERRORS;
     }
 }
+
+#ifndef TRACY_ENABLE
+    #undef ZoneScoped
+#endif
 
 #undef ListTemplate
 #undef ON_DEBUG
